@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+use App\Http\Requests\ReorderTasksRequest;
 
 class TaskController extends Controller
 {
@@ -49,32 +50,15 @@ class TaskController extends Controller
         return redirect()->route('tasks.index');
     }
 
-    public function reorder(Request $request)
+    public function reorder(ReorderTasksRequest $request)
     {
-        $newOrder = $request->order; // Array of task IDs
+        $newOrder = $request->order;
 
-        // Fetch all existing task IDs
-        $allTaskIds = Task::pluck('id')->toArray();
-
-        // Sort both arrays to check completeness (order-insensitive)
-        $sortedNewOrder = $newOrder;
-        $sortedAllTaskIds = $allTaskIds;
-        sort($sortedNewOrder);
-        sort($sortedAllTaskIds);
-
-        // Fail if list is incomplete or contains invalid IDs
-        if ($sortedNewOrder !== $sortedAllTaskIds) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'The provided task list is incomplete or contains invalid IDs.'
-            ], 422);
-        }
-
-        // Update priorities according to the new order
         foreach ($newOrder as $index => $id) {
             Task::where('id', $id)->update(['priority' => $index + 1]);
         }
 
         return response()->json(['status' => 'success']);
     }
+
 }
