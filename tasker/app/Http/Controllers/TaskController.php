@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use App\Http\Requests\ReorderTasksRequest;
-use Illuminate\Support\Facades\Log;
 
 class TaskController extends Controller
 {
@@ -53,8 +52,6 @@ class TaskController extends Controller
 
     public function reorder(ReorderTasksRequest $request)
     {
-        Log::info('Reorder request received', ['order' => $request->order]);
-
         foreach ($request->order as $index => $id) {
             Task::where('id', $id)->update(['priority' => $index + 1]);
         }
