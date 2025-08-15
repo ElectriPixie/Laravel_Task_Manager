@@ -3,26 +3,43 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Task;
 
 class ReorderTasksRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
+    public function authorize()
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
-    public function rules(): array
+    public function rules()
     {
         return [
-            //
+            'order' => ['required', 'array'],
+            'order.*' => ['integer', 'distinct', 'exists:tasks,id'],
         ];
     }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $allTaskIds = Task::pluck('id')->toArray();
+            $submittedIds = $this->input('order', []);
+
+            $missing = array_diff($allTaskIds, $submittedIds);
+            $extra = array_diff($submittedIds, $allTaskIds);
+
+            if (!empty($missing) || !empty($extra)) {
+                $message = [];
+                if (!empty($missing)) {
+                    $message[] = 'Missing task IDs: ' . implode(', ', $missing);
+                }
+                if (!empty($extra)) {
+                    $message[] = 'Unknown task IDs: ' . implode(', ', $extra);
+                }
+                $validator->errors()->add('order', implode(' | ', $message));
+            }
+        });
+    }
 }
+
