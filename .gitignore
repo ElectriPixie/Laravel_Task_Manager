@@ -1,3 +1,7 @@
 vender/
-composer.json
 composer.lock
+/node_modules
+/.env
+/bootstrap/cache/*.php
+/public/storage
+/storage/*.key
