@@ -9,10 +9,20 @@ use App\Models\Task;
 class ProjectController extends Controller
 {
     // List all projects
-    public function index()
+    public function index(Request $request)
     {
-        $projects = Project::orderBy('name')->get();
-        return view('projects.index', compact('projects'));
+        $projectId = $request->get('project_id');
+
+        // Fetch all projects for the dropdown
+        $projects = \App\Models\Project::orderBy('name')->get();
+
+        // Fetch tasks filtered by project (or all if none selected)
+        $tasks = \App\Models\Task::when($projectId, function ($query) use ($projectId) {
+            $query->where('project_id', $projectId);
+        })->orderBy('priority')->get();
+
+        // Pass both $tasks and $projects to the projects.index view
+        return view('projects.index', compact('tasks', 'projects', 'projectId'));
     }
 
     // Show form to create a new project
