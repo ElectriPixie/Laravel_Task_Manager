@@ -21,7 +21,7 @@ Tasker is a lightweight Laravel web application for managing tasks. Features inc
 ---
 
 ## Installation (from Git)
-
+```markdown
 1. **Clone the repository**
 
 ```bash
