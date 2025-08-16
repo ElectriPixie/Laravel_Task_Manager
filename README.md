@@ -45,6 +45,7 @@ composer install
 ```bash
 unzip Laravel_Task_Manager.zip
 cd Laravel_Task_Manager
+cd tasker
 ```
 
 2. **Install Composer dependencies**
