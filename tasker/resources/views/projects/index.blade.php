@@ -37,8 +37,26 @@
     @else
         <p>No tasks in this project.</p>
     @endif
+
+<div style="margin-top: 24px; display: flex; justify-content: space-between; align-items: center;">
+    <!-- Edit Project (left) -->
+    <a href="{{ route('projects.edit', $currentProject) }}" class="btn btn-secondary">
+        Edit Project
+    </a>
+
+    <!-- Delete Project (right) -->
+    <form id="delete-project-form" action="{{ route('projects.destroy', $currentProject) }}" method="POST">
+        @csrf
+        @method('DELETE')
+        <button type="button" class="btn btn-danger" 
+                onclick="if(confirm('Are you sure you want to delete this project and all its tasks?')) { this.form.submit(); }">
+            Delete Project
+        </button>
+    </form>
+</div>
 @endif
 @endsection
+
 @section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -76,10 +94,10 @@ document.addEventListener('DOMContentLoaded', () => {
         list.addEventListener('dragend', updateOrder);
     }
 
-    // Delete buttons
+    // Delete task buttons
     document.querySelectorAll('.delete-button').forEach(button => {
         button.addEventListener('click', () => {
-            const form = document.querySelector(`.delete-form[data-task-id='${button.dataset.taskId}']`);
+            const form = button.closest('li').querySelector('.delete-form');
             if (form) form.submit();
         });
     });
