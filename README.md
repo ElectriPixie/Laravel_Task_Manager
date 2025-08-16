@@ -24,8 +24,8 @@ Tasker is a lightweight Laravel web application for managing tasks. Features inc
 1. **Clone the repository**
 
 ```bash
-git clone <your-repo-url> tasker
-cd tasker
+git clone https://github.com/ElectriPixie/Laravel_Task_Manager.git Laravel_Task_Manager
+cd Laravel_Task_Manager
 ````
 
 2. **Install dependencies via Composer**
@@ -41,8 +41,8 @@ composer install
 1. **Download the ZIP** of the project and extract it:
 
 ```bash
-unzip tasker.zip -d tasker
-cd tasker
+unzip Laravel_Task_Manager.zip -d Laravel_Task_Manager
+cd Laravel_Task_Manager
 ```
 
 2. **Install Composer dependencies**
