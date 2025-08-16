@@ -131,5 +131,4 @@ DB_PASSWORD=password
 MIT License
 
 ```
-
----
+````
