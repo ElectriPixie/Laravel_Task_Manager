@@ -43,7 +43,7 @@ composer install
 1. **Download the ZIP** of the project and extract it:
 
 ```bash
-unzip Laravel_Task_Manager.zip -d Laravel_Task_Manager
+unzip Laravel_Task_Manager.zip
 cd Laravel_Task_Manager
 ```
 
