@@ -1,3 +1,4 @@
+````markdown
 # Tasker - Simple Laravel Task Management App
 
 Tasker is a lightweight Laravel web application for managing tasks. Features include:
@@ -7,7 +8,8 @@ Tasker is a lightweight Laravel web application for managing tasks. Features inc
 - Reorder tasks via drag-and-drop
 - Tasks stored in MySQL with automatic priority management
 - Fully functional in Laravel Sail Docker environment
-- Per project task management
+- Per-project task management
+
 ---
 
 ## Prerequisites
@@ -25,7 +27,7 @@ Tasker is a lightweight Laravel web application for managing tasks. Features inc
 ```bash
 git clone https://github.com/ElectriPixie/Laravel_Task_Manager.git Laravel_Task_Manager
 cd Laravel_Task_Manager
-```
+````
 
 2. **Install dependencies via Composer**
 
@@ -98,14 +100,14 @@ DB_PASSWORD=password
 ## Usage
 
 * Open your browser at `http://localhost` (or the port Sail provides)
-* **Add a project:** Click `Create Project` and submit a task name
-* **Select a project:** Select a project from the "Current Project" dropdown menu
-* **Edit a Project:** Click `Edit` on button bar below project dropdown
-* **Delete a Project:** Click `Delete` on button bar below project dropdown
+* **Add a project:** Click `Create Project` and submit a project name
+* **Select a project:** Use the "Current Project" dropdown menu
+* **Edit a project:** Click `Edit` on the button bar below the project dropdown
+* **Delete a project:** Click `Delete` on the button bar below the project dropdown
 * **Add a task:** Click `Add Task` and submit a task name
 * **Edit a task:** Click `Edit` next to a task
 * **Delete a task:** Click `Delete` next to a task
-* **Reorder tasks:** Drag and drop tasks in the list — the order is automatically saved
+* **Reorder tasks:** Drag and drop tasks in the list — order is automatically saved
 
 ---
 
