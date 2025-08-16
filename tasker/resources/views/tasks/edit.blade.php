@@ -7,8 +7,8 @@
     @csrf
     @method('PUT')
     <input type="text" name="name" value="{{ $task->name }}" required>
-    <button type="submit">Update</button>
+    <button type="submit">Update Task</button>
 </form>
 
-<a href="{{ route('tasks.index') }}">Back to list</a>
+<a href="{{ route('projects.index', ['project_id' => $task->project_id]) }}">Back to Project</a>
 @endsection
