@@ -1,16 +1,20 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 
-Route::get('/', [TaskController::class, 'index'])->name('tasks.index');
+// Projects
+Route::resource('projects', ProjectController::class);
 
-Route::get('/tasks/create', [TaskController::class, 'create'])->name('tasks.create');
-Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
+// Nested Tasks (shallow for edit/update/delete)
+Route::resource('projects.tasks', TaskController::class)->shallow();
 
-Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
-Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
+// Task reordering (nested under project, keep project context)
+Route::post('/projects/{project}/tasks/reorder', [TaskController::class, 'reorder'])
+    ->name('projects.tasks.reorder');
 
-Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
-
-Route::post('/tasks/reorder', [TaskController::class, 'reorder'])->name('tasks.reorder');
+// Optional: redirect root to projects index
+Route::get('/', function () {
+    return redirect()->route('projects.index');
+});
