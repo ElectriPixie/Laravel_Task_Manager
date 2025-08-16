@@ -2,34 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Task;
 use Illuminate\Http\Request;
-use App\Http\Requests\ReorderTasksRequest;
+use App\Models\Task;
+use App\Models\Project;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(Project $project)
     {
-        $tasks = Task::orderBy('priority')->get();
-        return view('tasks.index', compact('tasks'));
+        $tasks = $project->tasks()->orderBy('priority')->get();
+        return view('tasks.index', compact('tasks', 'project'));
     }
 
-    public function create()
+    public function create(Project $project)
     {
-        return view('tasks.create');
+        return view('tasks.create', compact('project'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Project $project)
     {
-        $request->validate(['name' => 'required|string|max:255']);
-        $maxPriority = Task::max('priority') ?? 0;
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
 
-        Task::create([
+        $maxPriority = $project->tasks()->max('priority') ?? 0;
+
+        $project->tasks()->create([
             'name' => $request->name,
             'priority' => $maxPriority + 1,
         ]);
 
-        return redirect()->route('tasks.index');
+        return redirect()->route('projects.index', ['project_id' => $project->id])
+                         ->with('success', 'Task created.');
     }
 
     public function edit(Task $task)
@@ -41,21 +45,36 @@ class TaskController extends Controller
     {
         $request->validate(['name' => 'required|string|max:255']);
         $task->update(['name' => $request->name]);
-        return redirect()->route('tasks.index');
+
+        return redirect()->route('projects.index', ['project_id' => $task->project_id])
+                         ->with('success', 'Task updated.');
     }
 
     public function destroy(Task $task)
     {
         $task->delete();
-        return redirect()->route('tasks.index');
+        return redirect()->route('projects.index', ['project_id' => $task->project_id])
+                         ->with('success', 'Task deleted.');
     }
 
-    public function reorder(ReorderTasksRequest $request)
+    public function reorder(Request $request)
     {
-        foreach ($request->order as $index => $id) {
-            Task::where('id', $id)->update(['priority' => $index + 1]);
+        $request->validate([
+            'project_id' => 'required|exists:projects,id',
+            'order' => 'required|array',
+        ]);
+
+        $project = Project::findOrFail($request->project_id);
+
+        foreach ($request->order as $priority => $taskId) {
+            $project->tasks()->where('id', $taskId)->update(['priority' => $priority + 1]);
         }
 
-        return redirect()->back();
+        if($request->ajax()) {
+            return response()->json(['success' => true]);
+        }
+
+        return redirect()->route('projects.index', ['project_id' => $project->id])
+                        ->with('success', 'Tasks reordered.');
     }
 }
