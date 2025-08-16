@@ -1,4 +1,3 @@
-````markdown
 # Tasker - Simple Laravel Task Management App
 
 Tasker is a lightweight Laravel web application for managing tasks. Features include:
@@ -130,4 +129,3 @@ DB_PASSWORD=password
 MIT License
 
 ```
-````
